@@ -9,10 +9,10 @@ struct HomeScreen: View {
         TabView(selection: $tabSelection) {
             
             HomeFeedScreen(tabSelection: $tabSelection)
-            .font(.system(size: 30, weight: .bold, design: .rounded))
-            .tabItem {
-                Image(systemName: "house")
-            }.tag(0)
+                .font(.system(size: 30, weight: .bold, design: .rounded))
+                .tabItem {
+                    Image(systemName: "house")
+                }.tag(0)
             
             HomeSearchScreen()
                 .font(.system(size: 30, weight: .bold, design: .rounded))
@@ -39,7 +39,7 @@ struct HomeScreen: View {
                 }.tag(4)
         }
         .accentColor(Utils.color2)
-        .onAppear() {
+        .onAppear {
             UITabBar.appearance().barTintColor = .white
         }
     }

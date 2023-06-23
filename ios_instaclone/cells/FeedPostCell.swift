@@ -17,6 +17,7 @@ struct FeedPostCell: View {
                         WebImage(url: URL(string:post.imgUser!))
                             .resizable()
                             .clipShape(Circle())
+                            .scaledToFill()
                             .frame(height:46)
                             .frame(width:46)
                             .padding(.all, 2)
@@ -29,7 +30,7 @@ struct FeedPostCell: View {
                             .padding(.all, 2)
                     }
                 }.overlay(RoundedRectangle(cornerRadius: 25)
-                            .stroke(Utils.color2, lineWidth: 2))
+                    .stroke(Utils.color2, lineWidth: 2))
                 
                 VStack(alignment: .leading,spacing: 3){
                     Text(post.displayName!)
@@ -80,11 +81,11 @@ struct FeedPostCell: View {
                     viewModel.apiLikePost(uid: uid, post: post)
                 }, label: {
                     if post.isLiked!{
-                        Image("ic_like_on").resizable().frame(height:26).frame(width:26)
+                        Image("ic_like_on").resizable().scaledToFill().frame(height:20).frame(width:20).foregroundColor(.red)
                     }else{
                         Image("ic_like_off").resizable().frame(height:26).frame(width:26)
                     }
-                })
+                }).frame(height:26).frame(width:26)
                 Button(action: {
                     
                 }, label: {
@@ -102,7 +103,7 @@ struct FeedPostCell: View {
                     .font(.system(size: 16))
                 Spacer()
             }.padding(.all,15)
-
+            
         }
     }
 }

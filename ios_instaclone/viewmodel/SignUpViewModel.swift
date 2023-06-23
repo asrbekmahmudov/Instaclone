@@ -9,7 +9,7 @@ class SignUpViewModel: ObservableObject {
     
     func apiSignUp(email: String, password: String, completion: @escaping (Bool) -> ()){
         isLoading = true
-        SessionStore().signUp(email: email, password: password, handler: {(res,err) in
+        SessionStore().signUp(email: email, password: password, completion: {(res, err) in
             self.isLoading = false
             if err != nil {
                 print("Check email or password")

@@ -11,6 +11,8 @@ class DatabaseStore: ObservableObject {
     var FOLLOWERS_PATH  = "followers"
     
     let store = Firestore.firestore()
+    var following: [User] = []
+    var followers: [User] = []
     
     func storeUser(user: User) {
         
@@ -74,11 +76,21 @@ class DatabaseStore: ObservableObject {
     }
     
     
-    func updateMyImage(uid: String, imgUser: String?) {
+    func updateMyImage(uid: String, imgUser: String?, posts: [Post], followers: [User]) {
         store.collection(USER_PATH).document(uid).updateData(["imgUser": imgUser!])
+        for post in posts {
+            try store.collection(USER_PATH).document(uid).collection(POST_PATH).document(post.postId!).updateData(["imgUser": imgUser!])
+            try store.collection(USER_PATH).document(uid).collection(FEED_PATH).document(post.postId!).updateData(["imgUser": imgUser!])
+            
+            for follower in followers {
+                for post in posts {
+                    try store.collection(USER_PATH).document(follower.uid!).collection(FEED_PATH).document(post.postId!).updateData(["imgUser": imgUser!])
+                }
+            }
+        }
     }
     
-    func storePost(post: Post,completion: @escaping (Bool) -> ()) {
+    func storePost(post: Post, followers: [User], completion: @escaping (Bool) -> ()) {
         let postId = store.collection(USER_PATH).document(post.uid!).collection(POST_PATH).document().documentID
         
         let params = [
@@ -88,12 +100,16 @@ class DatabaseStore: ObservableObject {
             "imgPost": post.imgPost,
             "uid": post.uid,
             "displayName": post.displayName,
-            "imgUser": post.imgUser]
+            "imgUser": post.imgUser
+        ]
         
         if let uid = post.uid{
             do {
                 try store.collection(USER_PATH).document(uid).collection(POST_PATH).document(postId).setData(params)
                 try store.collection(USER_PATH).document(uid).collection(FEED_PATH).document(postId).setData(params)
+                for follower in followers {
+                    try store.collection(USER_PATH).document(follower.uid!).collection(FEED_PATH).document(postId).setData(params)
+                }
                 completion(true)
             }catch {
                 print("There was an error while trying to update a task \(error.localizedDescription).")
@@ -125,7 +141,6 @@ class DatabaseStore: ObservableObject {
                     post.time = time
                     post.uid = uid
                     post.isLiked = isLiked
-                    
                     items.append(post)
                 }
                 completion(items)
@@ -260,44 +275,44 @@ class DatabaseStore: ObservableObject {
         var items: [User] = []
         
         store.collection(USER_PATH).document(uid).collection(FOLLOWING_PATH).addSnapshotListener{ (querySnapshot, error) in
-                guard let documents = querySnapshot?.documents else {
-                    print("No users")
-                    return
-                }
-                documents.compactMap{ document in
-                    let uid = document["uid"] as? String ?? ""
-                    let email = document["email"] as? String ?? ""
-                    let displayName = document["displayName"] as? String ?? ""
-                    let imgUser = document["imgUser"] as? String ?? ""
-                    let user = User(uid: uid, email: email, displayName: displayName, imgUser: imgUser)
-                    items.append(user)
-                }
-                completion(items)
+            guard let documents = querySnapshot?.documents else {
+                print("No users")
+                return
             }
+            documents.compactMap{ document in
+                let uid = document["uid"] as? String ?? ""
+                let email = document["email"] as? String ?? ""
+                let displayName = document["displayName"] as? String ?? ""
+                let imgUser = document["imgUser"] as? String ?? ""
+                let user = User(uid: uid, email: email, displayName: displayName, imgUser: imgUser)
+                items.append(user)
+            }
+            completion(items)
+        }
     }
     
     func loadFollowers(uid: String,completion: @escaping ([User]?) -> ()) {
         var items: [User] = []
         
         store.collection(USER_PATH).document(uid).collection(FOLLOWERS_PATH).addSnapshotListener{ (querySnapshot, error) in
-                guard let documents = querySnapshot?.documents else {
-                    print("No users")
-                    return
-                }
-                documents.compactMap{ document in
-                    let uid = document["uid"] as? String ?? ""
-                    let email = document["email"] as? String ?? ""
-                    let displayName = document["displayName"] as? String ?? ""
-                    let imgUser = document["imgUser"] as? String ?? ""
-                    let user = User(uid: uid, email: email, displayName: displayName, imgUser: imgUser)
-                    items.append(user)
-                }
-                completion(items)
+            guard let documents = querySnapshot?.documents else {
+                print("No users")
+                return
             }
+            documents.compactMap{ document in
+                let uid = document["uid"] as? String ?? ""
+                let email = document["email"] as? String ?? ""
+                let displayName = document["displayName"] as? String ?? ""
+                let imgUser = document["imgUser"] as? String ?? ""
+                let user = User(uid: uid, email: email, displayName: displayName, imgUser: imgUser)
+                items.append(user)
+            }
+            completion(items)
+        }
     }
     
     func likeFeedPost(uid: String, post: Post) {
-
+        
         if let postId = post.postId{
             do {
                 try store.collection(USER_PATH).document(uid).collection(FEED_PATH).document(postId).updateData(["isLiked": post.isLiked!])

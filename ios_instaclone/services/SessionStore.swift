@@ -8,7 +8,7 @@ class SessionStore: ObservableObject {
     var didChange = PassthroughSubject<SessionStore, Never>()
     @Published var session: User? { didSet { self.didChange.send(self) }}
     var handle: AuthStateDidChangeListenerHandle?
-
+    
     func listen () {
         let idfv = UIDevice.current.identifierForVendor
         //print(idfv)
@@ -25,12 +25,12 @@ class SessionStore: ObservableObject {
     
     // additional methods (sign up, sign in) will go here
     
-    func signUp(email: String, password: String, handler: @escaping AuthDataResultCallback) {
-        Auth.auth().createUser(withEmail: email, password: password, completion: handler)
+    func signUp(email: String, password: String, completion: @escaping(AuthDataResult?, Error?) -> Void) {
+        Auth.auth().createUser(withEmail: email, password: password, completion: completion)
     }
     
-    func signIn(email: String, password: String, handler: @escaping AuthDataResultCallback) {
-        Auth.auth().signIn(withEmail: email, password: password, completion: handler)
+    func signIn(email: String, password: String, completion: @escaping(AuthDataResult?, Error?) -> Void) {
+        Auth.auth().signIn(withEmail: email, password: password, completion: completion)
     }
     
     func signOut () -> Bool {

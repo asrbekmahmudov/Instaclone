@@ -5,10 +5,10 @@ struct SignInScreen: View {
     @ObservedObject var viewModel = SignInViewModel()
     
     @State var isLoading = false
-    @State var email = "khurshid@gmail.com"
-    @State var password = "123qwe"
+    @State var email = ""
+    @State var password = ""
     
-
+    
     func doSignIn() {
         viewModel.apiSignIn(email: email, password: password, completion: {result in
             if !result{
@@ -27,16 +27,29 @@ struct SignInScreen: View {
                     Text("app_name").foregroundColor(.white)
                         .font(Font.custom("Billabong", size: 45))
                     
-                    TextField("email", text: $email)
+                    TextField("", text: $email)
                         .frame(height: 50).padding(.leading,10)
+                        .accentColor(.white)
                         .foregroundColor(.white)
                         .background(Color.white.opacity(0.4)).cornerRadius(8)
                         .padding(.top,10)
-                    TextField("password", text: $password)
+                        .placeholder(when: email.isEmpty) {
+                            Text("email").foregroundColor(.white.opacity(0.5))
+                                .frame(height: 50).padding(.leading,10)
+                                .padding(.top,10)
+                        }
+                    
+                    TextField("", text: $password)
                         .frame(height: 50).padding(.leading,10)
+                        .accentColor(Color.green)
                         .foregroundColor(.white)
                         .background(Color.white.opacity(0.4)).cornerRadius(8)
                         .padding(.top,10)
+                        .placeholder(when: password.isEmpty) {
+                            Text("password").foregroundColor(.white.opacity(0.5))
+                                .frame(height: 50).padding(.leading,10)
+                                .padding(.top,10)
+                        }
                     
                     Button(action: {
                         doSignIn()

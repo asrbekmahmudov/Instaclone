@@ -55,21 +55,21 @@ struct HomeUploadScreen: View {
                                 Image(systemName: "camera").resizable().scaledToFit().frame(width: 40, height: 40)
                             })
                             .actionSheet(isPresented: $showActionSheet) {
-                                        ActionSheet(
-                                            title: Text("Actions"),
-                                            buttons: [
-                                                .cancel { print(self.showActionSheet) },
-                                                .default(Text("Pick Photo")){
-                                                    self.sourceType = .photoLibrary
-                                                    self.isImagePickerDisplay.toggle()
-                                                },
-                                                .default(Text("Take Photo")){
-                                                    self.sourceType = .camera
-                                                    self.isImagePickerDisplay.toggle()
-                                                },
-                                            ]
-                                        )
-                                    }
+                                ActionSheet(
+                                    title: Text("Actions"),
+                                    buttons: [
+                                        .cancel { print(self.showActionSheet) },
+                                        .default(Text("Pick Photo")){
+                                            self.sourceType = .photoLibrary
+                                            self.isImagePickerDisplay.toggle()
+                                        },
+                                        .default(Text("Take Photo")){
+                                            self.sourceType = .camera
+                                            self.isImagePickerDisplay.toggle()
+                                        },
+                                    ]
+                                )
+                            }
                             .sheet(isPresented: self.$isImagePickerDisplay) {
                                 ImagePickerView(selectedImage: self.$selectedImage, sourceType: self.sourceType)
                             }
@@ -95,12 +95,19 @@ struct HomeUploadScreen: View {
             }
             .navigationBarItems(trailing:
                                     Button(action: {
-                                        self.uploadPost()
-                                    }, label: {
-                                        Image(systemName: "square.and.arrow.up")
-                                    })
+                self.uploadPost()
+            }, label: {
+                Image(systemName: "square.and.arrow.up")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+            })
             )
             .navigationBarTitle("Upload",displayMode: .inline)
+        }.onAppear {
+            if let uid = session.session?.uid! {
+                viewModel.apiLoadFollowers(uid: uid)
+            }
         }
     }
 }

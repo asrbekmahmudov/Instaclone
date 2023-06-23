@@ -26,7 +26,7 @@ struct UserCell: View {
                         .padding(.all, 2)
                 }
             }.overlay(RoundedRectangle(cornerRadius: 25)
-                        .stroke(Utils.color2, lineWidth: 2))
+                .stroke(Utils.color2, lineWidth: 2))
             
             VStack(alignment: .leading,spacing: 3){
                 Text(user.displayName!)
@@ -69,6 +69,6 @@ struct UserCell: View {
 
 struct UserCell_Previews: PreviewProvider {
     static var previews: some View {
-        UserCell(uid: "uid", user: User(uid: "1", displayName: "khurshid88", email: "shamsun.com@gmail.com"),viewModel: SearchViewModel())
+        UserCell(uid: "uid", user: User(uid: "1", displayName: "Asrbek", email: "Asrbek@gmail.com"),viewModel: SearchViewModel())
     }
 }

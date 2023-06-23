@@ -29,7 +29,7 @@ struct LikePostCell: View {
                             .padding(.all, 2)
                     }
                 }.overlay(RoundedRectangle(cornerRadius: 25)
-                            .stroke(Utils.color2, lineWidth: 2))
+                    .stroke(Utils.color2, lineWidth: 2))
                 
                 VStack(alignment: .leading,spacing: 3){
                     Text(post.displayName!)
@@ -80,11 +80,11 @@ struct LikePostCell: View {
                     viewModel.apiLikePost(uid: uid, post: post)
                 }, label: {
                     if post.isLiked! {
-                        Image("ic_like_on").resizable().frame(height:28).frame(width:28)
+                        Image("ic_like_on").resizable().scaledToFill().frame(height:22).frame(width:22).foregroundColor(.red)
                     }else{
                         Image("ic_like_off").resizable().frame(height:28).frame(width:28)
                     }
-                })
+                }).frame(height:28).frame(width:28)
                 Button(action: {
                     
                 }, label: {
@@ -97,12 +97,12 @@ struct LikePostCell: View {
             .padding(.top,15)
             
             HStack(spacing: 0){
-                Text("Make a symbolic breakpoint at UIView, category on UIView listed in")
+                Text(post.caption!)
                     .foregroundColor(.black)
                     .font(.system(size: 16))
                 Spacer()
             }.padding(.all,15)
-
+            
         }
     }
 }

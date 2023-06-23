@@ -24,4 +24,14 @@ class FeedViewModel: ObservableObject {
         DatabaseStore().removeMyPost(uid: uid, post: post)
         apiFeedList(uid: uid)
     }
+    
+    func apiLoadUser(uid: String){
+        DatabaseStore().loadUser(uid: uid, completion: { user in
+            if (user?.email!) != nil {
+                self.isLoading = false
+            } else {
+                SessionStore().signOut()
+            }
+        })
+    }
 }

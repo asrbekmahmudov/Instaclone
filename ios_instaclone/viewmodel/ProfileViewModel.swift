@@ -38,16 +38,16 @@ class ProfileViewModel: ObservableObject {
         })
     }
     
-    func apiUploadMyImage(uid: String, image: UIImage){
+    func apiUploadMyImage(uid: String, image: UIImage, post: [Post]){
         isLoading = true
         StorageStore().uploadUserImage(uid: uid, image, completion: { downloadUrl in
-            self.apiUpdateMyImage(uid: uid, imgUser: downloadUrl)
+            self.apiUpdateMyImage(uid: uid, imgUser: downloadUrl, post: post)
             self.apiLoadUser(uid: uid)
         })
     }
     
-    func apiUpdateMyImage(uid: String, imgUser: String?){
-        DatabaseStore().updateMyImage(uid: uid, imgUser: imgUser)
+    func apiUpdateMyImage(uid: String, imgUser: String?, post: [Post]){
+        DatabaseStore().updateMyImage(uid: uid, imgUser: imgUser, posts: post, followers: followers)
     }
     
     func apiLoadFollowing(uid: String) {

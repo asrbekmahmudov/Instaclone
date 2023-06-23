@@ -8,10 +8,10 @@ struct Post: Hashable {
     var postId: String? = ""
     var caption: String? = ""
     var imgPost: String? = ""
-    var time: String? = "February 2, 2021"
+    var time: String? = "June 15, 2023"
     
     var uid: String? = ""
-    var displayName: String? = "khurshid88"
+    var displayName: String? = "Asrbek"
     var imgUser: String? = ""
     
     var isLiked: Bool? = false

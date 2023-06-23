@@ -26,14 +26,18 @@ struct HomeFeedScreen: View {
             
             .navigationBarItems(trailing:
                                     Button(action: {
-                                        self.tabSelection = 2
-                                    }, label: {
-                                        Image(systemName: "camera")
-                                    })
+                self.tabSelection = 2
+            }, label: {
+                Image(systemName: "camera")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+            })
             )
             .navigationBarTitle("Instagram",displayMode: .inline)
         }.onAppear{
             if let uid = session.session?.uid! {
+                viewModel.apiLoadUser(uid: uid)
                 viewModel.apiFeedList(uid: uid)
             }
         }

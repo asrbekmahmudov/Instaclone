@@ -9,7 +9,7 @@ class SignInViewModel: ObservableObject {
     
     func apiSignIn(email: String, password: String, completion: @escaping (Bool) -> ()){
         isLoading = true
-        SessionStore().signIn(email: email, password: password, handler: {(res,err) in
+        SessionStore().signIn(email: email, password: password, completion: {(res,err) in
             self.isLoading = false
             if err != nil {
                 print("Check email or password")

@@ -6,7 +6,13 @@ struct HomeSearchScreen: View {
     @EnvironmentObject var session: SessionStore
     @ObservedObject var viewModel = SearchViewModel()
     @State var keyword = ""
-    
+    var searchResults: [User] {
+        if keyword.isEmpty {
+            return viewModel.items
+        } else {
+            return viewModel.items.filter { $0.displayName!.contains(keyword) }
+        }
+    }
     var body: some View {
         NavigationView{
             ZStack{
@@ -19,11 +25,12 @@ struct HomeSearchScreen: View {
                         .padding(.leading,20).padding(.trailing,20).padding(.top, 20)
                     
                     List{
-                        ForEach(viewModel.items, id:\.self){ item in
-                            let uid = (session.session?.uid)!
-                            UserCell(uid: uid, user: item, viewModel: viewModel)
-                                .listRowInsets(EdgeInsets())
-                                .buttonStyle(PlainButtonStyle())
+                        ForEach(searchResults, id:\.self){ item in
+                            if let uid = session.session?.uid {
+                                UserCell(uid: uid, user: item, viewModel: viewModel)
+                                    .listRowInsets(EdgeInsets())
+                                    .buttonStyle(PlainButtonStyle())
+                            }
                         }
                     }
                     .listStyle(PlainListStyle())
@@ -35,8 +42,9 @@ struct HomeSearchScreen: View {
             }
             .navigationBarTitle("Search",displayMode: .inline)
         }.onAppear{
-            let uid = (session.session?.uid)!
-            viewModel.apiUserList(uid: uid, keyword: keyword)
+            if let uid = session.session?.uid {
+                viewModel.apiUserList(uid: uid, keyword: keyword)
+            }
         }
     }
 }

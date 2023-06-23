@@ -16,9 +16,12 @@ struct MyPostCell: View {
                 .resizable()
                 .frame(width: length, height: length)
                 .scaledToFit()
-                .onLongPressGesture {
+                .onTapGesture(count: 2) {
                     self.showingAlert = true
                 }
+            //                .onLongPressGesture {
+            //                    self.showingAlert = true
+            //                }
                 .alert(isPresented: $showingAlert) {
                     let title = "Delete"
                     let message = "Do you want to delete this post?"
@@ -27,6 +30,7 @@ struct MyPostCell: View {
                         viewModel.apiRemovePost(uid: uid, post: post)
                     }), secondaryButton: .cancel())
                 }
+            
             
             Text(post.caption!)
                 .foregroundColor(.black)
@@ -40,6 +44,6 @@ struct MyPostCell: View {
 
 struct MyPostCell_Previews: PreviewProvider {
     static var previews: some View {
-        MyPostCell(uid: "uid", viewModel: ProfileViewModel(),post: Post(caption: "khurshid88", imgPost: Utils.image2),length: UIScreen.width)
+        MyPostCell(uid: "uid", viewModel: ProfileViewModel(),post: Post(caption: "Asrbek", imgPost: Utils.image2),length: UIScreen.width)
     }
 }

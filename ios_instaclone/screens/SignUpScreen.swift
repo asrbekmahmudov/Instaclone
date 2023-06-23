@@ -8,9 +8,9 @@ struct SignUpScreen: View {
     @ObservedObject var viewModel = SignUpViewModel()
     @Environment(\.presentationMode) var presentation
     @State var isLoading = false
-    @State var fullname = "Xurshidbek"
-    @State var email = "khurshid@gmail.com"
-    @State var password = "123qwe"
+    @State var fullname = ""
+    @State var email = ""
+    @State var password = ""
     @State var cpassword = ""
     
     func doSignUp(){
@@ -38,29 +38,49 @@ struct SignUpScreen: View {
                     Text("app_name").foregroundColor(.white)
                         .font(Font.custom("Billabong", size: 45))
                     
-                    TextField("fullname", text: $fullname)
+                    TextField("", text: $fullname)
                         .frame(height: 50).padding(.leading,10)
                         .foregroundColor(.white)
                         .background(Color.white.opacity(0.4)).cornerRadius(8)
                         .padding(.top,10)
+                        .placeholder(when: fullname.isEmpty) {
+                            Text("fullname").foregroundColor(.white.opacity(0.5))
+                                .frame(height: 50).padding(.leading,10)
+                                .padding(.top,10)
+                        }
                     
-                    TextField("email", text: $email)
+                    TextField("", text: $email)
                         .frame(height: 50).padding(.leading,10)
                         .foregroundColor(.white)
                         .background(Color.white.opacity(0.4)).cornerRadius(8)
                         .padding(.top,10)
+                        .placeholder(when: email.isEmpty) {
+                            Text("email").foregroundColor(.white.opacity(0.5))
+                                .frame(height: 50).padding(.leading,10)
+                                .padding(.top,10)
+                        }
                     
-                    TextField("password", text: $password)
+                    TextField("", text: $password)
                         .frame(height: 50).padding(.leading,10)
                         .foregroundColor(.white)
                         .background(Color.white.opacity(0.4)).cornerRadius(8)
                         .padding(.top,10)
+                        .placeholder(when: password.isEmpty) {
+                            Text("password").foregroundColor(.white.opacity(0.5))
+                                .frame(height: 50).padding(.leading,10)
+                                .padding(.top,10)
+                        }
                     
-                    TextField("cpassword", text: $cpassword)
+                    TextField("", text: $cpassword)
                         .frame(height: 50).padding(.leading,10)
                         .foregroundColor(.white)
                         .background(Color.white.opacity(0.4)).cornerRadius(8)
                         .padding(.top,10)
+                        .placeholder(when: cpassword.isEmpty) {
+                            Text("cpassword").foregroundColor(.white.opacity(0.5))
+                                .frame(height: 50).padding(.leading,10)
+                                .padding(.top,10)
+                        }
                     
                     Button(action: {
                         doSignUp()
@@ -101,7 +121,7 @@ struct SignUpScreen: View {
         }
         .navigationBarBackButtonHidden(true)
         .accentColor(.white)
-
+        
     }
 }
 

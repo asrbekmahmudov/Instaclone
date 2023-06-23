@@ -5,10 +5,10 @@ import SwiftUI
 
 class UploadViewModel: ObservableObject {
     @Published var isLoading = false
+    @Published var followers: [User] = []
     
     func apiUploadPostImage(uid: String, image: UIImage, completion: @escaping (String) -> ()){
         StorageStore().uploadPostImage(uid: uid, image, completion: { downloadUrl in
-            print(downloadUrl)
             completion(downloadUrl)
         })
     }
@@ -23,7 +23,7 @@ class UploadViewModel: ObservableObject {
                 post.imgUser = user?.imgUser
                 post.uid = user?.uid
                 
-                DatabaseStore().storePost(post: post){result in
+                DatabaseStore().storePost(post: post, followers: self.followers){result in
                     self.isLoading = false
                     completion(result)
                 }
@@ -34,6 +34,12 @@ class UploadViewModel: ObservableObject {
     func apiLoadUser(uid: String, completion: @escaping (User?) -> ()){
         DatabaseStore().loadUser(uid: uid, completion: { user in
             completion(user)
+        })
+    }
+    
+    func apiLoadFollowers(uid: String) {
+        DatabaseStore().loadFollowers(uid: uid, completion: { users in
+            self.followers = users!
         })
     }
 }

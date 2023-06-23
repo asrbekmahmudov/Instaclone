@@ -1,9 +1,3 @@
-//
-//  ios_instacloneUITests.swift
-//  ios_instacloneUITests
-//
-//  Created by KHURSHIDBEK KURBANOV on 2021/08/12.
-//
 
 import XCTest
 
